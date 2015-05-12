@@ -1,0 +1,7 @@
+{
+  "name": "LegalThings Signature Pad",
+  "private": true,
+  "dependencies": {
+    "angular": "1.3.2"
+  }
+}
