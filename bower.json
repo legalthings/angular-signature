@@ -1,6 +1,11 @@
 {
-  "name": "LegalThings Signature Pad",
-  "private": true,
+  "name": "AngularJS Signature Pad",
+  "description": "HTML5 canvas based smooth signature drawing as AngularJS directive",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/legalthings/signature-pad-angular.git"
+  }
   "dependencies": {
     "angular": "1.3.2",
     "signature_pad": "~1.3.4"
