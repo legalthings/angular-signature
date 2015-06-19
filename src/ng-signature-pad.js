@@ -1,12 +1,10 @@
 /**
- * ngSignaturePad
- * https://github.com/marcorinck/ngSignaturePad
- * Copyright (c) 2013 ; Licensed MIT
- * (modified version)
+ * https://github.com/legalthings/signature-pad-angular
+ * Copyright (c) 2015 ; Licensed MIT
  */
-angular.module('ngSignaturePad', []);
+angular.module('signaturePad', []);
 
-angular.module('ngSignaturePad').directive('signaturePad', [
+angular.module('signaturePad').directive('signaturePad', [
   function () {
     'use strict';
     var signaturePad, canvas, element, EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
@@ -52,3 +50,6 @@ angular.module('ngSignaturePad').directive('signaturePad', [
     };
   }
 ]);
+
+// Backward compatibility
+angular.module('ngSignaturePad', ['signaturePad']);
