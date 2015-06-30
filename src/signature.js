@@ -1,20 +1,24 @@
-/**
+"use strict";
+
+/*
  * https://github.com/legalthings/signature-pad-angular
  * Copyright (c) 2015 ; Licensed MIT
  */
-angular.module('signaturePad', []);
 
-angular.module('signaturePad').directive('signaturePad', [
+angular.module('signature', []);
+
+angular.module('signature').directive('signaturePad', [
   function () {
-    'use strict';
     var signaturePad, canvas, element, EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
     return {
-      restrict: 'A',
+      restrict: 'EA',
       replace: true,
-      template: '<div class="signature" style="height: 220px; width: 568px;"><canvas height="220" width="568"></canvas></div>',
+      template: '<div class="signature" ng-style="{height: height + \'px\'; width: width + \'px\'}"><canvas height="{{ height }}" width="{{ width }}"></canvas></div>',
       scope: {
         accept: '=',
-        clear: '='
+        clear: '=',
+        height: '@',
+        width: '@'
       },
       controller: [
         '$scope',
@@ -43,6 +47,9 @@ angular.module('signaturePad').directive('signaturePad', [
         element = $element;
         signaturePad = new SignaturePad(canvas.get(0));
         
+        if (!$scope.height) $scope.height = 220;
+        if (!$scope.width) $scope.width = 568;
+        
         if ($scope.signature && !$scope.signature.$isEmpty && $scope.signature.dataUrl) {
           signaturePad.fromDataURL($scope.signature.dataUrl);
         }
@@ -52,4 +59,5 @@ angular.module('signaturePad').directive('signaturePad', [
 ]);
 
 // Backward compatibility
-angular.module('ngSignaturePad', ['signaturePad']);
+angular.module('ngSignaturePad', ['signature']);
+
