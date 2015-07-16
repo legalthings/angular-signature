@@ -10,7 +10,7 @@ your own buttons._
 
 Install this module using bower
 
-    bower install -s angular-signature
+    bower install angular-signature --save
 
 Add the module to your app
 

@@ -2,6 +2,8 @@
   "name": "angular-signature",
   "description": "HTML5 canvas based smooth signature drawing as AngularJS directive",
   "license": "MIT",
+  "main": "src/signature.js",
+  "ignore": [],
   "repository": {
     "type": "git",
     "url": "git://github.com/legalthings/signature-pad-angular.git"
