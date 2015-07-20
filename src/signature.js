@@ -1,5 +1,3 @@
-"use strict";
-
 /*
  * https://github.com/legalthings/signature-pad-angular
  * Copyright (c) 2015 ; Licensed MIT
@@ -9,6 +7,8 @@ angular.module('signature', []);
 
 angular.module('signature').directive('signaturePad', [
   function () {
+    'use strict';
+  
     var signaturePad, canvas, element, EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
     return {
       restrict: 'EA',
