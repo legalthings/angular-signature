@@ -13,7 +13,7 @@ angular.module('signature').directive('signaturePad', [
     return {
       restrict: 'EA',
       replace: true,
-      template: '<div class="signature" ng-style="{height: height + \'px\'; width: width + \'px\'}"><canvas height="{{ height }}" width="{{ width }}"></canvas></div>',
+      template: '<div class="signature" ng-style="{height: height + \'px\', width: width + \'px\'}"><canvas height="{{ height }}" width="{{ width }}"></canvas></div>',
       scope: {
         accept: '=',
         clear: '=',
