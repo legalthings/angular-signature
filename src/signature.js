@@ -17,6 +17,7 @@ angular.module('signature').directive('signaturePad', [
       scope: {
         accept: '=',
         clear: '=',
+        dataurl: '=',
         height: '@',
         width: '@'
       },
@@ -40,6 +41,10 @@ angular.module('signature').directive('signaturePad', [
           $scope.clear = function () {
             signaturePad.clear();
           };
+
+          $scope.$watch("dataurl", function (dataUrl) {
+            signaturePad.fromDataURL(dataUrl);
+          });
         }
       ],
       link: function ($scope, $element) {
@@ -60,4 +65,3 @@ angular.module('signature').directive('signaturePad', [
 
 // Backward compatibility
 angular.module('ngSignaturePad', ['signature']);
-
