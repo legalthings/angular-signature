@@ -5,8 +5,8 @@
 
 angular.module('signature', []);
 
-angular.module('signature').directive('signaturePad', [
-  function () {
+angular.module('signature').directive('signaturePad', ['$window',
+  function ($window) {
     'use strict';
   
     var signaturePad, canvas, element, EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
@@ -58,6 +58,20 @@ angular.module('signature').directive('signaturePad', [
         if ($scope.signature && !$scope.signature.$isEmpty && $scope.signature.dataUrl) {
           signaturePad.fromDataURL($scope.signature.dataUrl);
         }
+
+        $scope.onResize = function() {
+          var canvas = $element.find('canvas').get(0);
+          var ratio =  Math.max($window.devicePixelRatio || 1, 1);
+          canvas.width = canvas.offsetWidth * ratio;
+          canvas.height = canvas.offsetHeight * ratio;
+          canvas.getContext("2d").scale(ratio, ratio);
+        }
+
+        $scope.onResize();
+
+        angular.element($window).bind('resize', function() {
+            $scope.onResize();
+        });
       }
     };
   }
