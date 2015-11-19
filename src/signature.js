@@ -8,7 +8,7 @@ angular.module('signature', []);
 angular.module('signature').directive('signaturePad', ['$window',
   function ($window) {
     'use strict';
-  
+
     var signaturePad, canvas, element, EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
     return {
       restrict: 'EA',
@@ -26,7 +26,7 @@ angular.module('signature').directive('signaturePad', ['$window',
         function ($scope) {
           $scope.accept = function () {
             var signature = {};
-            
+
             if (!signaturePad.isEmpty()) {
               signature.dataUrl = signaturePad.toDataURL();
               signature.isEmpty = false;
@@ -34,10 +34,10 @@ angular.module('signature').directive('signaturePad', ['$window',
               signature.dataUrl = EMPTY_IMAGE;
               signature.isEmpty = true;
             }
-            
+
             return signature;
           };
-          
+
           $scope.clear = function () {
             signaturePad.clear();
           };
@@ -49,30 +49,29 @@ angular.module('signature').directive('signaturePad', ['$window',
           });
         }
       ],
-      link: function ($scope, $element) {
-        canvas = $element.find('canvas');
-        element = $element;
-        signaturePad = new SignaturePad(canvas.get(0));
-        
-        if (!$scope.height) $scope.height = 220;
-        if (!$scope.width) $scope.width = 568;
-        
-        if ($scope.signature && !$scope.signature.$isEmpty && $scope.signature.dataUrl) {
-          signaturePad.fromDataURL($scope.signature.dataUrl);
+      link: function (scope, element) {
+        canvas = element.find('canvas').get(0);
+        signaturePad = new SignaturePad(canvas);
+
+        if (!scope.height) scope.height = 220;
+        if (!scope.width) scope.width = 568;
+
+        if (scope.signature && !scope.signature.$isEmpty && scope.signature.dataUrl) {
+          signaturePad.fromDataURL(scope.signature.dataUrl);
         }
 
-        $scope.onResize = function() {
-          var canvas = $element.find('canvas').get(0);
+        scope.onResize = function() {
+          var canvas = element.find('canvas').get(0);
           var ratio =  Math.max($window.devicePixelRatio || 1, 1);
           canvas.width = canvas.offsetWidth * ratio;
           canvas.height = canvas.offsetHeight * ratio;
           canvas.getContext("2d").scale(ratio, ratio);
         }
 
-        $scope.onResize();
+        scope.onResize();
 
         angular.element($window).bind('resize', function() {
-            $scope.onResize();
+            scope.onResize();
         });
       }
     };
