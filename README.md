@@ -2,9 +2,9 @@
 
 AngularJS directive for the [signature pad](https://github.com/szimek/signature_pad/) JavaScript library by szimek.
 
-_In contrast to other AngularJS modules for szimek's signature pad, this library doesn't apply any styling and the
-directive only places the canvas and not the buttons. You bind the signature pad calls to the scope and call them from
-your own buttons._
+_In contrast to other AngularJS modules for szimek's signature pad, this library doesn't apply any styling. The
+directive only places the canvas, not any buttons. You bind the signature pad js calls to the functions in scope of your
+controller. This means you can call them from your own (custom) buttons._
 
 ## Installation
 
