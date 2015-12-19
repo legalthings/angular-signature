@@ -6,6 +6,8 @@ _In contrast to other AngularJS modules for szimek's signature pad, this library
 directive only places the canvas, not any buttons. You bind the signature pad js calls to the functions in scope of your
 controller. This means you can call them from your own (custom) buttons._
 
+![sign animation](https://cloud.githubusercontent.com/assets/100821/11911005/77b3e2fe-a5de-11e5-9221-cfaafb737cd7.gif)
+
 ## Installation
 
 Install this module using bower
@@ -23,7 +25,7 @@ Add the module to your app
 ### Basics
 
 ```html
-<signature-pad signature accept="accept" clear="clear" height="220" width="568"></signature-pad>
+<signature-pad accept="accept" clear="clear" height="220" width="568"></signature-pad>
 <button ng-click="clear()">Clear signature</button>
 <button ng-click="signature = accept()">Sign</button>
 ```
