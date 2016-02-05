@@ -27,8 +27,8 @@ angular.module('signature').directive('signaturePad', ['$window',
           $scope.accept = function () {
             var signature = {};
 
-            if (!signaturePad.isEmpty()) {
-              signature.dataUrl = signaturePad.toDataURL();
+            if (!$scope.signaturePad.isEmpty()) {
+              signature.dataUrl = $scope.signaturePad.toDataURL();
               signature.isEmpty = false;
             } else {
               signature.dataUrl = EMPTY_IMAGE;
@@ -39,25 +39,25 @@ angular.module('signature').directive('signaturePad', ['$window',
           };
 
           $scope.clear = function () {
-            signaturePad.clear();
+            $scope.signaturePad.clear();
           };
 
           $scope.$watch("dataurl", function (dataUrl) {
             if (dataUrl) {
-              signaturePad.fromDataURL(dataUrl);
+              $scope.signaturePad.fromDataURL(dataUrl);
             }
           });
         }
       ],
       link: function (scope, element) {
         canvas = element.find('canvas')[0];
-        signaturePad = new SignaturePad(canvas);
+        scope.signaturePad = new SignaturePad(canvas);
 
         if (!scope.height) scope.height = 220;
         if (!scope.width) scope.width = 568;
 
         if (scope.signature && !scope.signature.$isEmpty && scope.signature.dataUrl) {
-          signaturePad.fromDataURL(scope.signature.dataUrl);
+          scope.signaturePad.fromDataURL(scope.signature.dataUrl);
         }
 
         scope.onResize = function() {
