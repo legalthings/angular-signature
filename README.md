@@ -12,6 +12,7 @@ controller. This means you can call them from your own (custom) buttons._
 
 Install this module using bower
 
+    bower install signature_pad --save
     bower install angular-signature --save
 
 Add the module to your app
@@ -25,6 +26,10 @@ Add the module to your app
 ### Basics
 
 ```html
+<head>
+    <script type="text/javascript" src="bower_components/signature_pad/signature_pad.min.js"></script>
+</head>
+
 <signature-pad accept="accept" clear="clear" height="220" width="568"></signature-pad>
 <button ng-click="clear()">Clear signature</button>
 <button ng-click="signature = accept()">Sign</button>
