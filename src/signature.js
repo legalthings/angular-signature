@@ -13,7 +13,7 @@ angular.module('signature').directive('signaturePad', ['$window',
     return {
       restrict: 'EA',
       replace: true,
-      template: '<div class="signature" ng-style="{height: height + \'px\', width: width + \'px\'}"><canvas height="{{ height }}" width="{{ width }}" ng-mouseup="updateModel()"></canvas></div>',
+      template: '<div class="signature" ng-style="{height: height + \'px\', width: width + \'px\'}"><canvas ng-mouseup="updateModel()"></canvas></div>',
       scope: {
         accept: '=',
         clear: '=',
@@ -58,9 +58,6 @@ angular.module('signature').directive('signaturePad', ['$window',
       link: function (scope, element) {
         canvas = element.find('canvas')[0];
         scope.signaturePad = new SignaturePad(canvas);
-
-        if (!scope.height) scope.height = 220;
-        if (!scope.width) scope.width = 568;
 
         if (scope.signature && !scope.signature.$isEmpty && scope.signature.dataUrl) {
           scope.signaturePad.fromDataURL(scope.signature.dataUrl);
