@@ -53,11 +53,6 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
             $scope.dataurl = result.isEmpty ? undefined : result.dataUrl;
           };
 
-          $scope.clear = function () {
-            $scope.signaturePad.clear();
-            $scope.dataurl = undefined;
-          };
-
           $scope.$watch(['width', 'height'], $scope.onResize);
         }
       ],
@@ -79,6 +74,14 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
 
           ctx.resetTransform();
           ctx.scale(scaleWidth, scaleHeight);
+        }
+
+        scope.clear = function() {
+          var ctx = canvas.getContext('2d');
+          ctx.resetTransform();
+          scope.signaturePad.clear();
+          scope.dataurl = undefined;
+          updateScale();
         }
 
         scope.onResize = function () {
