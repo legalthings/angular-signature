@@ -72,13 +72,13 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
           var scaleWidth = canvas.width / parent[0].offsetWidth;
           var scaleHeight = canvas.height / parent[0].offsetHeight;
 
-          ctx.resetTransform();
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
           ctx.scale(scaleWidth, scaleHeight);
         }
 
         scope.clear = function() {
           var ctx = canvas.getContext('2d');
-          ctx.resetTransform();
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
           scope.signaturePad.clear();
           scope.dataurl = undefined;
           updateScale();
