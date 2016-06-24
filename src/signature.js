@@ -76,6 +76,11 @@ angular.module('signature').directive('signaturePad', ['$window',
         angular.element($window).bind('resize', function() {
             scope.onResize();
         });
+
+        // listen to touchend event and updateModel when event is fired
+        element.on('touchend', function () {
+          scope.$apply(scope.updateModel);
+        });
       }
     };
   }
