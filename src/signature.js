@@ -5,25 +5,35 @@
 
 angular.module('signature', []);
 
-angular.module('signature').directive('signaturePad', ['$window',
-  function ($window) {
+angular.module('signature').directive('signaturePad', ['$window', '$timeout',
+  function ($window, $timeout) {
     'use strict';
 
-    var signaturePad, canvas, element, EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
+    var EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
+
     return {
       restrict: 'EA',
       replace: true,
-      template: '<div class="signature" ng-style="{height: height + \'px\', width: width + \'px\'}"><canvas ng-mouseup="updateModel()"></canvas></div>',
+      template: (
+        '<div class="signature" ng-style="{height: height + \'px\', width: width + \'px\'}">' +
+        '<canvas ng-mouseup="updateModel()" style="width: 100%; height: 100%;"></canvas>' +
+        '</div>'
+      ),
       scope: {
         accept: '=',
         clear: '=',
-        dataurl: '=',
+        dataurl: '=?',
+        isEmpty: '=?',
         height: '@',
         width: '@'
       },
       controller: [
         '$scope',
         function ($scope) {
+          $scope.isEmpty = function () {
+            return $scope.signaturePad.isEmpty();
+          };
+
           $scope.accept = function () {
             var signature = {};
 
@@ -41,40 +51,62 @@ angular.module('signature').directive('signaturePad', ['$window',
           $scope.updateModel = function () {
             var result = $scope.accept();
             $scope.dataurl = result.isEmpty ? undefined : result.dataUrl;
-          }
-
-          $scope.clear = function () {
-            $scope.signaturePad.clear();
-            $scope.dataurl = undefined;
           };
 
-          $scope.$watch("dataurl", function (dataUrl) {
-            if (dataUrl) {
-              $scope.signaturePad.fromDataURL(dataUrl);
-            }
-          });
+          $scope.$watch(['width', 'height'], $scope.onResize);
         }
       ],
       link: function (scope, element) {
-        canvas = element.find('canvas')[0];
+        var canvas = element.find('canvas')[0];
+        var parent = element;
+        var onDevicePixelRatioChange = $window.matchMedia('(-webkit-device-pixel-ratio:1)');
+
         scope.signaturePad = new SignaturePad(canvas);
 
         if (scope.signature && !scope.signature.$isEmpty && scope.signature.dataUrl) {
           scope.signaturePad.fromDataURL(scope.signature.dataUrl);
         }
 
-        scope.onResize = function() {
-          var canvas = element.find('canvas')[0];
-          var ratio =  Math.max($window.devicePixelRatio || 1, 1);
-          canvas.width = canvas.offsetWidth * ratio;
-          canvas.height = canvas.offsetHeight * ratio;
-          canvas.getContext("2d").scale(ratio, ratio);
+        function updateScale() {
+          var ctx = canvas.getContext('2d');
+          var scaleWidth = canvas.width / parent[0].offsetWidth;
+          var scaleHeight = canvas.height / parent[0].offsetHeight;
+
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.scale(scaleWidth, scaleHeight);
         }
 
-        scope.onResize();
+        scope.clear = function() {
+          var ctx = canvas.getContext('2d');
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          scope.signaturePad.clear();
+          scope.dataurl = undefined;
+          updateScale();
+        }
 
-        angular.element($window).bind('resize', function() {
-            scope.onResize();
+        scope.onResize = function () {
+          var ratio = Math.max($window.devicePixelRatio || 1, 1);
+          var newWidth = Math.round(scope.width * ratio);
+          var newHeight = Math.round(scope.height * ratio);
+
+          if (canvas.width !== newWidth || canvas.height !== newHeight) {
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+            scope.signaturePad.clear();
+          }
+          updateScale();
+        };
+
+        $timeout(scope.onResize);
+
+        var resizeCallback = scope.onResize.bind(this);
+
+        angular.element($window).bind('resize', resizeCallback);
+        onDevicePixelRatioChange.addListener(resizeCallback);
+
+        scope.$on('$destroy', function removeListeners() {
+          angular.element($window).unbind('resize', resizeCallback);
+          onDevicePixelRatioChange.removeListener(resizeCallback);
         });
       }
     };

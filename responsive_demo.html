@@ -1,0 +1,47 @@
+<!doctype html>
+<html class="no-js" lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.js"></script>
+    <script type="text/javascript" src="src/signature.js"></script>
+    <style>
+      .signature-area {
+        outline: 2px blue solid;
+        background-color: #f9fafb;
+        position: relative;
+        width: 100%;
+      }
+      .signature-area:before {
+        content: "";
+        display: block;
+        padding-top: 33.3%;
+      }
+      .signature {
+        width: 100%!important;
+        height: 100%!important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+    </style>
+  </head>
+  <body ng-app="" ng-strict-di>
+    <div class="signature-area">
+      <signature-pad accept="accept" clear="clear" height="333" width="1000"></signature-pad>
+    </div>
+    <button ng-click="clear()">Clear signature</button>
+    <button ng-click="signature = accept()">Sign</button>
+    <script>
+    angular.module('app', ['signature']).controller('SignModalCtrl', function() {});
+
+    angular.element(document).ready(function() {
+      angular.bootstrap(document, ['app']);
+    });
+    </script>
+  </body>
+</html>

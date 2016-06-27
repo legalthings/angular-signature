@@ -1,0 +1,28 @@
+{
+  "name": "angular-signature",
+  "version": "1.0.0",
+  "description": "AngularJS directive for the [signature pad](https://github.com/szimek/signature_pad/) JavaScript library by szimek.",
+  "main": "src/signature.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/legalthings/angular-signature.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/legalthings/angular-signature/issues"
+  },
+  "homepage": "https://github.com/legalthings/angular-signature#readme",
+  "dependencies": {
+    "angular": ">=1.3 <2.0",
+    "signature_pad": "~1.5.3"
+  },
+  "devDependencies": {
+    "eslint": "^2.10.2",
+    "eslint-config-airbnb-base": "^3.0.1",
+    "eslint-config-xo-space": "^0.13.0",
+    "eslint-plugin-import": "^1.8.0"
+  },
+  "scripts": {
+    "lint": "./node_modules/eslint/bin/eslint.js ."
+  }
+}
