@@ -86,13 +86,12 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
 
         scope.onResize = function () {
           var ratio = Math.max($window.devicePixelRatio || 1, 1);
+          var newWidth = Math.round(scope.width * ratio);
+          var newHeight = Math.round(scope.height * ratio);
 
-          if (
-              canvas.width !== scope.width * ratio ||
-              canvas.height !== scope.height * ratio
-          ) {
-            canvas.width = scope.width * ratio;
-            canvas.height = scope.height * ratio;
+          if (canvas.width !== newWidth || canvas.height !== newHeight) {
+            canvas.width = newWidth;
+            canvas.height = newHeight;
             scope.signaturePad.clear();
           }
           updateScale();
