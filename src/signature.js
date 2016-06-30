@@ -69,6 +69,9 @@ angular.module('signature').directive('signaturePad', ['$window',
           canvas.width = canvas.offsetWidth * ratio;
           canvas.height = canvas.offsetHeight * ratio;
           canvas.getContext("2d").scale(ratio, ratio);
+
+          // reset dataurl
+          scope.dataurl = null;
         }
 
         scope.onResize();
