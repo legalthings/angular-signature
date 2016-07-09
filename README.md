@@ -24,8 +24,10 @@ Add the module to your app
 
 ### Basics
 
+**Note: clear, accept and dataurl attributes are required**
+ 
 ```html
-<signature-pad accept="accept" clear="clear" height="220" width="568"></signature-pad>
+<signature-pad accept="accept" clear="clear" dataurl="dataurl" height="220" width="568"></signature-pad>
 <button ng-click="clear()">Clear signature</button>
 <button ng-click="signature = accept()">Sign</button>
 ```
