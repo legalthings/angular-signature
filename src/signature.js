@@ -13,13 +13,14 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
     return {
       restrict: 'EA',
       replace: true,
-      template: '<div class="signature" ng-style="{height: height + \'px\', width: width + \'px\'}"><canvas ng-mouseup="updateModel()"></canvas></div>',
+      template: '<div class="signature" ng-style="{height: height + \'px\', width: width + \'px\'}"><canvas ng-mouseup="onMouseup()" ng-mousedown="notifyDrawing({ drawing: true })"></canvas></div>',
       scope: {
         accept: '=',
         clear: '=',
         dataurl: '=',
         height: '@',
-        width: '@'
+        width: '@',
+        notifyDrawing: '&onDrawing',
       },
       controller: [
         '$scope',
@@ -36,6 +37,13 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
             }
 
             return signature;
+          };
+
+          $scope.onMouseup = function () {
+            $scope.updateModel();
+
+            // notify that drawing has ended
+            $scope.notifyDrawing({ drawing: false });
           };
 
           $scope.updateModel = function () {
@@ -86,6 +94,29 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
         angular.element($window).bind('resize', function() {
             scope.onResize();
         });
+
+        // listen to touchend event and updateModel when event is fired
+        element.on('touchend', function () {
+          scope.$apply(scope.updateModel);
+        });
+
+        element.on('touchstart', onTouchstart);
+
+        element.on('touchend', onTouchend);
+
+        function onTouchstart() {
+          scope.$apply(function () {
+            // notify that drawing has started
+            scope.notifyDrawing({ drawing: true });
+          });
+        }
+
+        function onTouchend() {
+          scope.$apply(function () {
+            // notify that drawing has ended
+            scope.notifyDrawing({ drawing: false });
+          });
+        }
       }
     };
   }
