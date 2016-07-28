@@ -5,8 +5,8 @@
 
 angular.module('signature', []);
 
-angular.module('signature').directive('signaturePad', ['$window',
-  function ($window) {
+angular.module('signature').directive('signaturePad', ['$window', '$timeout',
+  function ($window, $timeout) {
     'use strict';
 
     var signaturePad, canvas, element, EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
@@ -47,9 +47,16 @@ angular.module('signature').directive('signaturePad', ['$window',
           };
 
           $scope.updateModel = function () {
-            var result = $scope.accept();
-            $scope.dataurl = result.isEmpty ? undefined : result.dataUrl;
-          }
+            /*
+             defer handling mouseup event until $scope.signaturePad handles
+             first the same event
+             */
+            $timeout()
+              .then(function () {
+                var result = $scope.accept();
+                $scope.dataurl = result.isEmpty ? undefined : result.dataUrl;
+              });
+          };
 
           $scope.clear = function () {
             $scope.signaturePad.clear();
@@ -77,6 +84,9 @@ angular.module('signature').directive('signaturePad', ['$window',
           canvas.width = canvas.offsetWidth * ratio;
           canvas.height = canvas.offsetHeight * ratio;
           canvas.getContext("2d").scale(ratio, ratio);
+
+          // reset dataurl
+          scope.dataurl = null;
         }
 
         scope.onResize();
@@ -98,6 +108,9 @@ angular.module('signature').directive('signaturePad', ['$window',
 
         function onTouchend() {
           scope.$apply(function () {
+            // updateModel
+            scope.updateModel();
+
             // notify that drawing has ended
             scope.notifyDrawing({ drawing: false });
           });
