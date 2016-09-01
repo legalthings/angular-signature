@@ -70,9 +70,15 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
           });
         }
       ],
-      link: function (scope, element) {
+      link: function (scope, element, attrs) {
         canvas = element.find('canvas')[0];
         scope.signaturePad = new SignaturePad(canvas);
+        
+        //Resize to fix UI Bootstrap Modal Show problem
+        $timeout(function(){
+            canvas.width = attrs.width;
+            canvas.height = attrs.height; 
+        }, 500);
 
         if (scope.signature && !scope.signature.$isEmpty && scope.signature.dataUrl) {
           scope.signaturePad.fromDataURL(scope.signature.dataUrl);
