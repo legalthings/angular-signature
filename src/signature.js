@@ -98,13 +98,13 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
           var parentWidth = parent.offsetWidth;
           if (parentWidth < width) {
             // Calculate aspect ratio
-            var newWdith = parentWidth;
-            var newHeight = newWdith * aspectRatio;
+            var newWidth = parentWidth;
+            var newHeight = newWidth * aspectRatio;
             canvas.style.height = newHeight + "px";
-            canvas.style.width = newWdith + "px";
+            canvas.style.width = newWidth + "px";
 
             // Calculate scale
-            var scale =  width / newWdith;
+            var scale =  width / newWidth;
             ctx.resetTransform();
             ctx.scale(scale, scale);
           }
