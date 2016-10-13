@@ -93,7 +93,7 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
           scope.signaturePad.fromDataURL(scope.signature.dataUrl);
         }
 
-        var recalculateScale = function () {
+        var calculateScale = function () {
           // calculate parent Width;
           var parentWidth = parent.offsetWidth;
           if (parentWidth < width) {
@@ -110,12 +110,12 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
           }
         }
 
-        angular.element($window).bind('resize', recalculateScale);
+        angular.element($window).bind('resize', calculateScale);
         scope.$on('$destroy', function () {
-          angular.element($window).unbind('resize', recalculateScale);
+          angular.element($window).unbind('resize', calculateScale);
         });
 
-        recalculateScale();
+        calculateScale();
         
         element.on('touchstart', onTouchstart);
 
