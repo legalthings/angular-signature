@@ -5,8 +5,8 @@
 
 angular.module('signature', []);
 
-angular.module('signature').directive('signaturePad', ['$window', '$timeout',
-  function ($window, $timeout) {
+angular.module('signature').directive('signaturePad', ['$window', '$interval',
+  function ($window, $interval) {
     'use strict';
 
     var signaturePad, element, EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
@@ -72,6 +72,7 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
       link: function (scope, element, attrs) {
         var canvas = element.find('canvas')[0];
         var parent = canvas.parentElement;
+        var parentWidth = null;
         var ctx = canvas.getContext('2d');
 
         var width = parseInt(scope.width, 10);
@@ -80,13 +81,7 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
 
         canvas.width = width;
         canvas.height = height;
-        
-        //Resize to fix UI Bootstrap Modal Show problem
-        $timeout(function(){
-            canvas.width = attrs.width;
-            canvas.height = attrs.height; 
-        }, 500);
-        
+
         scope.signaturePad = new SignaturePad(canvas);
 
         if (scope.signature && !scope.signature.$isEmpty && scope.signature.dataUrl) {
@@ -94,6 +89,10 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
         }
 
         var calculateScale = function () {
+          if (parentWidth === parent.offsetWidth) {
+            return;
+          }
+
           // calculate parent Width;
           var parentWidth = parent.offsetWidth;
           if (parentWidth < width) {
@@ -109,6 +108,12 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
             ctx.scale(scale, scale);
           }
         }
+
+        var resizeIH = $interval(calculateScale, 200);
+        scope.$on('$destroy', function () {
+          $interval.stop(resizeIH);
+          resizeIH = null;
+        });
 
         angular.element($window).bind('resize', calculateScale);
         scope.$on('$destroy', function () {
