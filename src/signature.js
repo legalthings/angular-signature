@@ -86,8 +86,8 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
           scope.signaturePad.fromDataURL(dataUrl);
 
           $timeout().then(function() {
-              ctx.resetTransform();
-              ctx.scale(scale, scale);
+            ctx.resetTransform();
+            ctx.scale(1 / scale, 1 / scale);
           });
         };
 
