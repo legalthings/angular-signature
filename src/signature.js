@@ -79,14 +79,14 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
         scope.signaturePad = new SignaturePad(canvas);
 
         scope.setDataUrl = function(dataUrl) {
-          ctx.resetTransform();
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
           ctx.scale(1, 1);
 
           scope.signaturePad.clear();
           scope.signaturePad.fromDataURL(dataUrl);
 
           $timeout().then(function() {
-            ctx.resetTransform();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.scale(1 / scale, 1 / scale);
           });
         };
@@ -107,7 +107,7 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
           canvas.style.width = Math.round(newWidth) + "px";
 
           scale = newScale;
-          ctx.resetTransform();
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
           ctx.scale(1 / scale, 1 / scale);
         };
 
@@ -123,7 +123,7 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
         });
 
         calculateScale();
-        
+
         element.on('touchstart', onTouchstart);
         element.on('touchend', onTouchend);
 
