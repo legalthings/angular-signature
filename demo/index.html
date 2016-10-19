@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="app" ng-controller="AppCtrl">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Angular Signature demo</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+        <script src="../src/signature.js"></script>
+        <script src="app.js"></script>
+
+        <style>
+          html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+          }
+
+          .container {
+            border: 1px solid red;
+            padding: 10px 10px 40px 10px;
+            position: relative;
+            margin: 0 auto 0 auto;
+            height: 100%;
+          }
+
+          .container .signature {
+            border: 1px solid orange;
+            margin: 0 auto;
+            cursor: pointer;
+          }
+
+          .container .signature canvas {
+            border: 1px solid #999;
+            margin: 0 auto;
+            cursor: pointer;
+          }
+
+          .container .buttons {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+          }
+
+          .container .sizes {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+          }
+
+          .container .sizes input {
+            width: 4em;
+            text-align: center;
+          }
+
+          .result {
+            border: 1px solid blue;
+            margin: 30px auto 0 auto;
+            height: 220px;
+            width: 568px;
+          }
+        </style>
+    </head>
+    <body>
+        <div class="container" ng-style="{'max-width': boundingBox.width + 'px', 'max-height': boundingBox.height + 'px'}">
+            <signature-pad accept="accept" clear="clear" height="220" width="568" dataurl="dataurl"></signature-pad>
+
+            <div class="buttons">
+                <button ng-click="clear()">Clear</button>
+                <button ng-click="dataurl = signature.dataUrl" ng-disabled="!signature">Reset</button>
+                <button ng-click="signature = accept()">Sign</button>
+            </div>
+            <div class="sizes">
+                <input type="text" ng-model="boundingBox.width"> x <input type="text" ng-model="boundingBox.height">
+            </div>
+        </div>
+
+        <div class="result" ng-show="signature">
+            <img ng-src="{{ signature.dataUrl }}">
+        </div>
+    </body>
+</html>
+

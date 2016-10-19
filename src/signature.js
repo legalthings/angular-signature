@@ -5,19 +5,19 @@
 
 angular.module('signature', []);
 
-angular.module('signature').directive('signaturePad', ['$window', '$timeout',
-  function ($window, $timeout) {
+angular.module('signature').directive('signaturePad', ['$interval', '$timeout', '$window',
+  function ($interval, $timeout, $window) {
     'use strict';
 
     var signaturePad, element, EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
     return {
       restrict: 'EA',
       replace: true,
-      template: '<div class="signature" style="width: 100%; max-width:{{width}}px"><canvas ng-mouseup="onMouseup()" ng-mousedown="notifyDrawing({ drawing: true })"></canvas></div>',
+      template: '<div class="signature" style="width: 100%; max-width:{{width}}px; height: 100%; max-height:{{height}}px;"><canvas style="display: block; margin: 0 auto;" ng-mouseup="onMouseup()" ng-mousedown="notifyDrawing({ drawing: true })"></canvas></div>',
       scope: {
-        accept: '=',
-        clear: '=',
-        dataurl: '=',
+        accept: '=?',
+        clear: '=?',
+        dataurl: '=?',
         height: '@',
         width: '@',
         notifyDrawing: '&onDrawing',
@@ -26,16 +26,11 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
         '$scope',
         function ($scope) {
           $scope.accept = function () {
-            var signature = {};
 
-            if (!$scope.signaturePad.isEmpty()) {
-              signature.isEmpty = false;
-            } else {
-              signature.dataUrl = EMPTY_IMAGE;
-              signature.isEmpty = true;
-            }
-
-            return signature;
+            return {
+              isEmpty: $scope.dataurl === EMPTY_IMAGE,
+              dataUrl: $scope.dataurl
+            };
           };
 
           $scope.onMouseup = function () {
@@ -50,65 +45,77 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
              defer handling mouseup event until $scope.signaturePad handles
              first the same event
              */
-            $timeout()
-              .then(function () {
-                var result = $scope.accept();
-                $scope.dataurl = result.isEmpty ? undefined : result.dataUrl;
-              });
+            $timeout().then(function () {
+              $scope.dataurl = $scope.signaturePad.isEmpty() ? EMPTY_IMAGE : $scope.signaturePad.toDataURL();
+            });
           };
 
           $scope.clear = function () {
             $scope.signaturePad.clear();
-            $scope.dataurl = undefined;
+            $scope.dataurl = EMPTY_IMAGE;
           };
 
           $scope.$watch("dataurl", function (dataUrl) {
-            if (dataUrl) {
-              $scope.signaturePad.fromDataURL(dataUrl);
+            if (!dataUrl || $scope.signaturePad.toDataURL() === dataUrl) {
+              return;
             }
+
+            $scope.setDataUrl(dataUrl);
           });
         }
       ],
       link: function (scope, element, attrs) {
         var canvas = element.find('canvas')[0];
         var parent = canvas.parentElement;
+        var scale = 0;
         var ctx = canvas.getContext('2d');
 
         var width = parseInt(scope.width, 10);
         var height = parseInt(scope.height, 10);
-        var aspectRatio = height / width;
 
         canvas.width = width;
         canvas.height = height;
-        
-        //Resize to fix UI Bootstrap Modal Show problem
-        $timeout(function(){
-            canvas.width = attrs.width;
-            canvas.height = attrs.height; 
-        }, 500);
-        
+
         scope.signaturePad = new SignaturePad(canvas);
 
-        if (scope.signature && !scope.signature.$isEmpty && scope.signature.dataUrl) {
-          scope.signaturePad.fromDataURL(scope.signature.dataUrl);
-        }
+        scope.setDataUrl = function(dataUrl) {
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.scale(1, 1);
 
-        var calculateScale = function () {
-          // calculate parent Width;
-          var parentWidth = parent.offsetWidth;
-          if (parentWidth < width) {
-            // Calculate aspect ratio
-            var newWidth = parentWidth;
-            var newHeight = newWidth * aspectRatio;
-            canvas.style.height = newHeight + "px";
-            canvas.style.width = newWidth + "px";
+          scope.signaturePad.clear();
+          scope.signaturePad.fromDataURL(dataUrl);
 
-            // Calculate scale
-            var scale =  width / newWidth;
-            ctx.resetTransform();
-            ctx.scale(scale, scale);
+          $timeout().then(function() {
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(1 / scale, 1 / scale);
+          });
+        };
+
+        var calculateScale = function() {
+          var scaleWidth = Math.min(parent.clientWidth / width, 1);
+          var scaleHeight = Math.min(parent.clientHeight / height, 1);
+
+          var newScale = Math.min(scaleWidth, scaleHeight);
+
+          if (newScale === scale) {
+            return;
           }
-        }
+
+          var newWidth = width * newScale;
+          var newHeight = height * newScale;
+          canvas.style.height = Math.round(newHeight) + "px";
+          canvas.style.width = Math.round(newWidth) + "px";
+
+          scale = newScale;
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.scale(1 / scale, 1 / scale);
+        };
+
+        var resizeIH = $interval(calculateScale, 200);
+        scope.$on('$destroy', function () {
+          $interval.stop(resizeIH);
+          resizeIH = null;
+        });
 
         angular.element($window).bind('resize', calculateScale);
         scope.$on('$destroy', function () {
@@ -116,9 +123,8 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
         });
 
         calculateScale();
-        
-        element.on('touchstart', onTouchstart);
 
+        element.on('touchstart', onTouchstart);
         element.on('touchend', onTouchend);
 
         function onTouchstart() {
@@ -144,3 +150,4 @@ angular.module('signature').directive('signaturePad', ['$window', '$timeout',
 
 // Backward compatibility
 angular.module('ngSignaturePad', ['signature']);
+
