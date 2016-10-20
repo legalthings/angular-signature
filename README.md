@@ -1,5 +1,7 @@
 # Angular Signature
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/legalthings/angular-signature/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/legalthings/angular-signature/?branch=master)
+
 AngularJS directive for the [signature pad](https://github.com/szimek/signature_pad/) JavaScript library by szimek.
 
 _In contrast to other AngularJS directives for szimek's signature pad, this directive does not apply any styling. The
