@@ -113,7 +113,7 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
 
         var resizeIH = $interval(calculateScale, 200);
         scope.$on('$destroy', function () {
-          $interval.stop(resizeIH);
+          $interval.cancel(resizeIH);
           resizeIH = null;
         });
 
