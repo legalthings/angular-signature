@@ -80,8 +80,10 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
         scope.signaturePad = new SignaturePad(canvas);
 
         scope.setDataUrl = function(dataUrl) {
+          var ratio = Math.max(window.devicePixelRatio || 1, 1);
+
           ctx.setTransform(1, 0, 0, 1, 0, 0);
-          ctx.scale(1, 1);
+          ctx.scale(ratio, ratio);
 
           scope.signaturePad.clear();
           scope.signaturePad.fromDataURL(dataUrl);
@@ -151,4 +153,3 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
 
 // Backward compatibility
 angular.module('ngSignaturePad', ['signature']);
-
