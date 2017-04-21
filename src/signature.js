@@ -18,6 +18,7 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
       scope: {
         accept: '=?',
         clear: '=?',
+        disabled: '=?',
         dataurl: '=?',
         height: '@',
         width: '@',
@@ -94,6 +95,10 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
           });
         };
 
+        scope.$watch('disabled', function (val) {
+            val ? scope.signaturePad.off() : scope.signaturePad.on();
+        });
+        
         var calculateScale = function() {
           var scaleWidth = Math.min(parent.clientWidth / width, 1);
           var scaleHeight = Math.min(parent.clientHeight / height, 1);
