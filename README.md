@@ -31,7 +31,7 @@ Add the module to your app
 ### Basics
 
 ```html
-<signature-pad accept="accept" clear="clear" height="220" width="568"></signature-pad>
+<signature-pad accept="accept" clear="clear" height="220" width="568" disabled="false"></signature-pad>
 <button ng-click="clear()">Clear signature</button>
 <button ng-click="signature = accept()">Sign</button>
 ```
