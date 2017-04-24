@@ -16,9 +16,13 @@ An online demo of the directive can be found [here](https://rawgit.com/legalthin
 
 ## Installation
 
-Install this module using bower
+Install this module using **bower**
 
     bower install angular-signature --save
+
+or install this module using **npm**
+
+    npm install angular-signature --save
 
 Add the module to your app
 
