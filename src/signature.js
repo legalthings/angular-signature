@@ -135,14 +135,15 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
         element.on('touchstart', onTouchstart);
         element.on('touchend', onTouchend);
 
-        function onTouchstart() {
+        function onTouchstart(event) {
           scope.$apply(function () {
             // notify that drawing has started
             scope.notifyDrawing({ drawing: true });
           });
+          event.preventDefault();
         }
 
-        function onTouchend() {
+        function onTouchend(event) {
           scope.$apply(function () {
             // updateModel
             scope.updateModel();
@@ -150,6 +151,7 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
             // notify that drawing has ended
             scope.notifyDrawing({ drawing: false });
           });
+          event.preventDefault();
         }
       }
     };
