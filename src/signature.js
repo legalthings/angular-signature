@@ -48,7 +48,7 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
              first the same event
              */
             $timeout().then(function () {
-              $scope.dataurl = $scope.signaturePad.isEmpty() ? EMPTY_IMAGE : $scope.signaturePad.toDataURL();
+              $scope.dataurl = $scope.signaturePad.toDataURL();
             });
           };
 
