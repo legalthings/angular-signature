@@ -18,6 +18,7 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
       scope: {
         accept: '=?',
         clear: '=?',
+        updateModel: '=?',
         disabled: '=?',
         dataurl: '=?',
         height: '@',
@@ -47,7 +48,7 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
              defer handling mouseup event until $scope.signaturePad handles
              first the same event
              */
-            $timeout(function () {
+            return $timeout(function () {
               $scope.dataurl = $scope.signaturePad.isEmpty() ? EMPTY_IMAGE : $scope.signaturePad.toDataURL();
             });
           };
