@@ -1,3 +1,5 @@
+**This plugin only works for AngularJS 1.x**
+
 # Angular Signature
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/legalthings/angular-signature/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/legalthings/angular-signature/?branch=master)
