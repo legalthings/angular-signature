@@ -1,6 +1,6 @@
 {
   "name": "angular-signature",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "HTML5 canvas based smooth signature drawing as angularJS directive",
   "main": "src/signature.js",
   "scripts": {

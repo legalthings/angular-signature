@@ -18,6 +18,7 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
       scope: {
         accept: '=?',
         clear: '=?',
+        updateModel: '=?',
         disabled: '=?',
         dataurl: '=?',
         height: '@',
@@ -47,7 +48,7 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
              defer handling mouseup event until $scope.signaturePad handles
              first the same event
              */
-            $timeout().then(function () {
+            return $timeout(function () {
               $scope.dataurl = $scope.signaturePad.isEmpty() ? EMPTY_IMAGE : $scope.signaturePad.toDataURL();
             });
           };
@@ -89,7 +90,7 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
           scope.signaturePad.clear();
           scope.signaturePad.fromDataURL(dataUrl);
 
-          $timeout().then(function() {
+          $timeout(function () {
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.scale(1 / scale, 1 / scale);
           });
